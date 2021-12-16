@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option go_package = "github.com/nassultany/GoDiemBFT/protos";
+
+package protos;
+
+service DiemRPC {
+    rpc ProposalMsg(Block) returns (ProposalResponse) {}
+}
+
+message Block {
+    int32 id = 1;
+    int32 round = 2;
+    string payload = 3;
+}
+
+message ProposalResponse {
+}
