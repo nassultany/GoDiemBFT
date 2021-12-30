@@ -1,4 +1,5 @@
-*.mod
-*.sum
+diem
 *.txt
-*.pb.go
+*.log
+*.ledger
+protos/*.go

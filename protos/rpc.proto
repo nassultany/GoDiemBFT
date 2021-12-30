@@ -5,14 +5,89 @@ option go_package = "github.com/nassultany/GoDiemBFT/protos";
 package protos;
 
 service DiemRPC {
-    rpc ProposalMsg(Block) returns (ProposalResponse) {}
+    rpc ProposalMsg(ProposalMessage) returns (ProposalResponse) {}
+    rpc TimeoutMsg(TimeoutMessage) returns (TimeoutResponse) {}
+    rpc VoteMsg(VoteMessage) returns (VoteResponse) {}
+}
+
+message LedgerCommitInfo {
+    string commitStateId = 1;
+    string voteInfoHash = 2;
+}
+
+message Signature {
+    string signer = 1;
+    bytes signature = 2;
+}
+
+message QC {
+    VoteInfo voteInfo = 1;
+    LedgerCommitInfo ledgerCommitInfo = 2;
+    repeated Signature signatures = 3;
+    string author = 4;
+    bytes authorSignature = 5;
+}
+
+message TC {
+    int32 round = 1;
+    repeated int32 tmoHighQcRounds = 2;
+    repeated bytes tmoSignatures = 3;
+}
+
+message TimeoutInfo {
+    int32 round = 1;
+    QC highQc = 2;
+    string sender = 3;
+    bytes signature = 4;
+}
+
+message VoteInfo {
+    string id = 1;
+    int32 round = 2;
+    string parentId = 3;
+    int32 parentRound = 4;
+    string execStateId = 5;
 }
 
 message Block {
-    int32 id = 1;
+    string author = 1;
     int32 round = 2;
     string payload = 3;
+    QC qc = 4;
+    string id = 5;
+}
+
+message ProposalMessage {
+    Block block = 1;
+    TC lastRoundTc = 2;
+    QC highCommitQc = 3;
+    bytes signature = 4;
 }
 
 message ProposalResponse {
+}
+
+message VoteMessage {
+    VoteInfo voteInfo = 1;
+    LedgerCommitInfo ledgerCommitInfo = 2;
+    QC highCommitQc = 3;
+    string sender = 4;
+    bytes signature = 5;
+}
+
+message VoteResponse {
+}
+
+message TimeoutMessage {
+    TimeoutInfo tmoInfo = 1;
+    TC lastRoundTc = 2;
+    QC highCommitQc = 3;
+}
+
+message TimeoutResponse {
+}
+
+message SetupConfig {
+    int32 f = 1;
+    
 }
